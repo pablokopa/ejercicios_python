@@ -2,15 +2,19 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
+# Definición de la clase VentanaPrincipal que hereda de Gtk.Window
 class VentanaPrincipal(Gtk.Window):
     def __init__(self):
         super().__init__()
+        # Configuración del título y tamaño de la ventana
         self.set_title("Ventana Flowbox")
         self.set_default_size(600, 220)
 
+        # Creación de una ventana con scroll
         scroll = Gtk.ScrolledWindow()
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 
+        # Creación de un FlowBox para contener los botones de colores
         flowbox = Gtk.FlowBox()
         flowbox.set_valign(Gtk.Align.START)
         flowbox.set_max_children_per_line(30)
@@ -18,10 +22,14 @@ class VentanaPrincipal(Gtk.Window):
         self.crea_flowbox(flowbox)
         scroll.add(flowbox)
 
+        # Adición del FlowBox con scroll a la ventana principal
         self.add(scroll)
+        # Conexión del evento de cierre de la ventana con la función Gtk.main_quit
         self.connect("delete-event", Gtk.main_quit)
+        # Mostrar todos los widgets
         self.show_all()
 
+    # Metodo para crear y añadir botones de colores al FlowBox
     def crea_flowbox(self, flowbox):
         colores = [
             "AliceBlue",
@@ -89,6 +97,7 @@ class VentanaPrincipal(Gtk.Window):
             boton = self.crear_boton_color(color)
             flowbox.add(boton)
 
+    # Metodo para crear un botón con un área de dibujo del color especificado
     def crear_boton_color(self, color):
         rgba = Gdk.RGBA()
         rgba.parse(color)
@@ -102,6 +111,7 @@ class VentanaPrincipal(Gtk.Window):
         boton.add(area)
         return boton
 
+    # Metodo para dibujar el color en el área de dibujo del botón
     def on_draw(self, control, cr, dic):
         contexto = control.get_style_context()
 
@@ -114,6 +124,7 @@ class VentanaPrincipal(Gtk.Window):
         cr.rectangle(0, 0, ancho, alto)
         cr.fill()
 
+# Creación de una instancia de VentanaPrincipal y ejecución del loop principal de GTK
 if __name__ == "__main__":
     win = VentanaPrincipal()
     Gtk.main()
